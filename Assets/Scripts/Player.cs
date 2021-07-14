@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     private Rigidbody rigidbodyComponent;
     private bool isGrounded;
     private int superJumpsRemaining;
+    private bool isFacingRight = true;
     
 
     // Start is called before the first frame update
@@ -37,6 +38,18 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         rigidbodyComponent.velocity = new Vector3(horizontalInput * 1.5f, rigidbodyComponent.velocity.y, 0);
+
+        //Flip the object when turns left or right
+        if (isFacingRight & horizontalInput < 0)
+        {
+            Flip();
+        }
+
+        if (!isFacingRight & horizontalInput > 0)
+        {
+            Flip();
+        }
+
 
         if (Physics.OverlapSphere(groundCheckTransform.position, 0.1f, playerMask).Length == 0)
         { 
@@ -65,5 +78,12 @@ public class Player : MonoBehaviour
             Destroy(other.gameObject);
             superJumpsRemaining++;
         }
+    }
+
+    private void Flip()
+    {
+        isFacingRight = !isFacingRight;
+
+        transform.Rotate(0.0f, 180.0f, 0.0f);
     }
 }
