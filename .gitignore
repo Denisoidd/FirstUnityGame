@@ -346,3 +346,5 @@ healthchecksdb
 /Library
 /ProjectSettings
 /Temp
+/Assembly-CSharp.csproj
+/July Game.sln
