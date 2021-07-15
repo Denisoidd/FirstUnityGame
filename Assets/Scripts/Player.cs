@@ -50,11 +50,22 @@ public class Player : MonoBehaviour
             Flip();
         }
 
+        //Check the velocity of the rigid body. If it's 0 then body is grounded
+        if (rigidbodyComponent.velocity.y == 0)
+        {
+            animator.SetBool("isJumping", false);
+        }
+        else
+        {
+            animator.SetBool("isJumping", true);
+        }
 
         if (Physics.OverlapSphere(groundCheckTransform.position, 0.1f, playerMask).Length == 0)
         { 
             return;
         }
+
+
 
         if (jumpKeyWasPressed)
         {
