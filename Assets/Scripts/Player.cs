@@ -7,12 +7,17 @@ public class Player : MonoBehaviour
     public Animator animator;
     [SerializeField] private Transform groundCheckTransform;
     [SerializeField] private LayerMask playerMask;
+
     private bool jumpKeyWasPressed;
+    private bool superJumpKeyWasPressed;
+    private float normalJumpPower = 5.0f;
+
     private float horizontalInput;
     private Rigidbody rigidbodyComponent;
     private bool isGrounded;
     private int superJumpsRemaining;
     private bool isFacingRight = true;
+    
     
 
     // Start is called before the first frame update
@@ -28,6 +33,12 @@ public class Player : MonoBehaviour
         {
             jumpKeyWasPressed = true;
             animator.SetBool("isJumping", true);
+        }
+
+        //super jump release
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            superJumpKeyWasPressed = true;
         }
 
         horizontalInput = Input.GetAxis("Horizontal");
@@ -65,22 +76,30 @@ public class Player : MonoBehaviour
             return;
         }
 
-
-
+        //normal jump check
         if (jumpKeyWasPressed)
         {
-            float jumpPower = 5f;
-            if (superJumpsRemaining > 0)
-            {
-                jumpPower *= 1.5f;
-                superJumpsRemaining--;
-            }
-            rigidbodyComponent.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
-            jumpKeyWasPressed = false;
+            MakeJump(normalJumpPower, ref jumpKeyWasPressed);
+            Debug.Log(jumpKeyWasPressed);
         }
 
-        
+        //super jump check
+        if (superJumpKeyWasPressed)
+        {
+            if (superJumpsRemaining > 0)
+            {
+                MakeJump(normalJumpPower * 1.5f, ref superJumpKeyWasPressed);
+                superJumpsRemaining--;
+            }
+        } 
     }
+
+    private void MakeJump(float jumpPower, ref bool jumpKeyWasPressed)
+    {
+        rigidbodyComponent.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+        jumpKeyWasPressed = false;
+    }
+
 
     private void OnTriggerEnter(Collider other)
     {
