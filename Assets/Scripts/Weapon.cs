@@ -7,8 +7,9 @@ public class Weapon : MonoBehaviour
     public Rigidbody bullet;
     public Transform gunFireTransform;
     public float bulletSpeed = 10.0f;
+    public float fireRate = 1.0f;
 
-    private bool isShooting;
+    private bool isShooting = true;
 
     // Start is called before the first frame update
     void Start()
@@ -21,13 +22,13 @@ public class Weapon : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            isShooting = true;
+            Shoot();
         }
     }
 
     void FixedUpdate()
     {
-        Shoot();
+
     }
 
     void Shoot()
@@ -36,7 +37,14 @@ public class Weapon : MonoBehaviour
         {
             Rigidbody bulletClone = (Rigidbody) Instantiate(bullet, gunFireTransform.position, bullet.transform.rotation);
             bulletClone.AddForce(gunFireTransform.right * bulletSpeed, ForceMode.Impulse);
+            StartCoroutine("FireDelay");
         }
+    }
+
+    IEnumerator FireDelay()
+    {
         isShooting = false;
+        yield return new WaitForSeconds(fireRate);
+        isShooting = true;
     }
 }
