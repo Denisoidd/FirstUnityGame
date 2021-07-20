@@ -5,6 +5,9 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public Animator animator;
+    [Range(0, 100)]
+    public float recoilForce = 50f;
+    public Transform fireDirection;
     [SerializeField] private Transform groundCheckTransform;
     [SerializeField] private LayerMask playerMask;
 
@@ -17,8 +20,6 @@ public class Player : MonoBehaviour
     private bool isGrounded;
     private int superJumpsRemaining;
     private bool isFacingRight = true;
-    
-    
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +29,21 @@ public class Player : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+    {
+        InputMoveLogic();
+    }
+
+    public void PlayerRecoil()
+    {
+        rigidbodyComponent.AddForce(-fireDirection.right * recoilForce, ForceMode.Impulse);
+    }
+
+    private void FixedUpdate()
+    {
+        Move();
+    }
+
+    private void InputMoveLogic()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -46,7 +62,7 @@ public class Player : MonoBehaviour
         animator.SetFloat("Speed", Mathf.Abs(horizontalInput));
     }
 
-    private void FixedUpdate()
+    private void Move()
     {
         rigidbodyComponent.velocity = new Vector3(horizontalInput * 1.5f, rigidbodyComponent.velocity.y, 0);
 
@@ -72,7 +88,7 @@ public class Player : MonoBehaviour
         }
 
         if (Physics.OverlapSphere(groundCheckTransform.position, 0.1f, playerMask).Length == 0)
-        { 
+        {
             return;
         }
 
@@ -91,7 +107,7 @@ public class Player : MonoBehaviour
                 MakeJump(normalJumpPower * 1.5f, ref superJumpKeyWasPressed);
                 superJumpsRemaining--;
             }
-        } 
+        }
     }
 
     private void MakeJump(float jumpPower, ref bool jumpKeyWasPressed)
@@ -99,7 +115,6 @@ public class Player : MonoBehaviour
         rigidbodyComponent.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
         jumpKeyWasPressed = false;
     }
-
 
     private void OnTriggerEnter(Collider other)
     {
