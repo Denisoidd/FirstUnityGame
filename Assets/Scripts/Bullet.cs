@@ -24,8 +24,15 @@ public class Bullet : MonoBehaviour
     {
         if (counter < maxRicochet)
         {
-            rigidBodyComponent.AddForce(col.contacts[0].normal * ricochetForce, ForceMode.Impulse);
-            counter++;
+            if (col.gameObject.layer == 10)
+            {
+                rigidBodyComponent.AddForce(col.contacts[0].normal * ricochetForce, ForceMode.Impulse);
+                counter++;
+            }
+            else if (col.gameObject.layer == 8)
+            {
+                DisableBullet();
+            }
         }
         else
         {
