@@ -8,6 +8,7 @@ public class Weapon : MonoBehaviour
     public Transform gunFireTransform;
     public float bulletSpeed = 10.0f;
     public float fireRate = 1.0f;
+    public Player playerScript;
 
     private bool isShooting = true;
 
@@ -35,6 +36,7 @@ public class Weapon : MonoBehaviour
     {
         if (isShooting)
         {
+            playerScript.PlayerRecoil();
             Rigidbody bulletClone = (Rigidbody) Instantiate(bullet, gunFireTransform.position, bullet.transform.rotation);
             bulletClone.AddForce(gunFireTransform.right * bulletSpeed, ForceMode.Impulse);
             StartCoroutine("FireDelay");
