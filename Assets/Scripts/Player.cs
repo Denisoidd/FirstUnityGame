@@ -77,11 +77,8 @@ public class Player : MonoBehaviour
             Flip();
         }
 
-<<<<<<< HEAD
+
         //Check if body is grounded
-=======
-        //Check the velocity of the rigid body. If it's 0 then body is grounded
->>>>>>> a37a78e2e849ba1824fc0d1925e3166e077f7f2b
         if (isGrounded)
         {
             animator.SetBool("isJumping", false);
@@ -91,15 +88,11 @@ public class Player : MonoBehaviour
             animator.SetBool("isJumping", true);
         }
 
-<<<<<<< HEAD
         //Check if there is an intersection between player and environment
         isGrounded = Physics.OverlapSphere(groundCheckTransform.position, 0.1f, playerMask).Length != 0;
 
         //Not allow to jump if not grounded
-=======
         isGrounded = Physics.OverlapSphere(groundCheckTransform.position, 0.1f, playerMask).Length != 0;
-
->>>>>>> a37a78e2e849ba1824fc0d1925e3166e077f7f2b
         if (!isGrounded)
         {
             return;
