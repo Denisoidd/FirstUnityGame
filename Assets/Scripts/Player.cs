@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     private bool jumpKeyWasPressed;
     private bool superJumpKeyWasPressed;
     private float normalJumpPower = 5.0f;
+    private float epsilon = 0.0001f;
 
     private float horizontalInput;
     private Rigidbody rigidbodyComponent;
@@ -78,7 +79,7 @@ public class Player : MonoBehaviour
         }
 
         //Check the velocity of the rigid body. If it's 0 then body is grounded
-        if (rigidbodyComponent.velocity.y == 0)
+        if (isGrounded)
         {
             animator.SetBool("isJumping", false);
         }
@@ -87,7 +88,9 @@ public class Player : MonoBehaviour
             animator.SetBool("isJumping", true);
         }
 
-        if (Physics.OverlapSphere(groundCheckTransform.position, 0.1f, playerMask).Length == 0)
+        isGrounded = Physics.OverlapSphere(groundCheckTransform.position, 0.1f, playerMask).Length != 0;
+
+        if (!isGrounded)
         {
             return;
         }
